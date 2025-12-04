@@ -1,4 +1,4 @@
-# Dockerfile
+
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -8,8 +8,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     build-essential \
     swig \
+    libbz2-dev \
     pkg-config \
     libcfitsio-dev \
+    libcairo2-dev \
     libnetpbm10-dev \
     netpbm \
     libpng-dev \
@@ -18,6 +20,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wcslib-dev \
     python3 \
     python3-dev \
+    python3-pip \
+    python3-scipy \
+    python3-pil \
+    python3-setuptools \
     python3-numpy \
     ca-certificates \
     curl \
@@ -34,6 +40,9 @@ WORKDIR /opt/astrometry.net
 # Can customize INSTALL_DIR via 'make install INSTALL_DIR=/path'
 RUN make && make py && make extra && \
     make install
+
+# Add solve-field to path
+ENV PATH="/usr/local/astrometry/bin:${PATH}"
 
 # 4. Create a default config that looks for index files in /data/index
 # To prevent long build times we don't download any indexes in the image; they are expected

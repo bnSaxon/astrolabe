@@ -17,7 +17,6 @@ Some common choices (rough guide):
 
 Examples:
   ./download_astrometry_indexes 4200 4201 4202
-If you run with no args, this script will download a modest, commonly-used subset (4203–4206)
 EOF
 
 if [ "$#" -eq 0 ]; then
