@@ -1,6 +1,6 @@
 # Astrolabe
 Inline-style: 
-![alt text](https://preview.redd.it/can-someone-explain-the-meaning-of-this-art-v0-pqktyu7doo2d1.jpeg "Logo Title Text 1")
+![alt text](https://github.com/bnSaxon/astrolabe/blob/main/art.webp)
 Maritime celestial navigation
 
 ## Quickstart
