@@ -12,6 +12,14 @@ echo
 read -p "Enter choice (1 or 2): " CHOICE
 echo
 
+
+BASE_DOCKER_CMD=(
+	docker run --rm -it 
+	-v "$(pwd)/data/input_images":/data/input
+	-v "$(pwd)/data/output":/data/output
+	-v "$(pwd)":/work
+)
+
 # OPTION 1: USER PROVIDES LOCAL INDEX DIRECTORY
 
 if [[ "$CHOICE" == "1" ]]; then
@@ -28,11 +36,10 @@ if [[ "$CHOICE" == "1" ]]; then
 	echo " -> /data/index (inside container)"
 	echo
 
-	docker run --rm -it \
+	"${BASE_DOCKER_CMD[@]}" \
 		-v "$INDEX_DIR":/data/index \
-		-v "$(pwd)":/work \
-		"$IMAGE_NAME"
-	
+		$IMAGE_NAME
+
 	exit 0
 fi
 
@@ -50,9 +57,8 @@ if [[ "$CHOICE" == "2" ]]; then
 		echo "Created/usiing directory: $PERSIST_DIR"
 		echo
 
-		docker run --rm -it \
+		"${BASE_DOCKER_CMD[@]}" \
 			-v "$PERSIST_DIR":/data/index \
-			-v "$(pwd)":/work \
 			"$IMAGE_NAME"
 		exit 0
 
@@ -62,8 +68,7 @@ if [[ "$CHOICE" == "2" ]]; then
 		echo "Indexes you download inside the container will vanish when it exits."
 		echo
 
-		docker run --rm -it \
-			-v "$(pwd)":/work \
+		"${BASE_DOCKER_CMD[@]}" \
 			"$IMAGE_NAME"
 
 		exit 0
