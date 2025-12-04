@@ -1,6 +1,5 @@
 # Astrolabe
-Inline-style: 
-![alt text](https://github.com/bnSaxon/astrolabe/blob/main/art.webp)
+[logo]: https://github.com/bnSaxon/astrolabe/blob/main/art.webp "Logo Title Text 2"
 Maritime celestial navigation
 
 ## Quickstart
