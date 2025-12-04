@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE_NAME="astrometry-net:latest"
+IMAGE_NAME="astrolabe:latest"
 
 echo "Building Docker image: ${IMAGE_NAME}"
 docker build -t "${IMAGE_NAME}" .
