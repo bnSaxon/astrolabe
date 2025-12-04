@@ -55,7 +55,7 @@ RUN mkdir -p /data/index && \
 COPY download_indexes.sh /usr/local/bin/download_astrometry_indexes
 RUN chmod +x /usr/local/bin/download_astrometry_indexes
 
-# 6. Set a reasonable default working directory
+# Set a reasonable default working directory
 WORKDIR /astrolabe
 
 # 7. Put astrometry binaries in PATH (usually installed to /usr/local/bin already)
