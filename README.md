@@ -1,10 +1,7 @@
 # Astrolabe
-![alt text][logo]
 
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+![Astrolabe Image](https://github.com/bnSaxon/astrolabe/blob/main/art.webp "Logo Title Text 2")
 
-![alt text][logo]
-[logo]: https://github.com/bnSaxon/astrolabe/blob/main/art.webp "Logo Title Text 2"
 Maritime celestial navigation
 
 ## Quickstart
