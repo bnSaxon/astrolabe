@@ -17,6 +17,7 @@ Some common choices (rough guide):
 
 Examples:
   ./download_astrometry_indexes 4200 4201 4202
+  ./download_astrometry_indexes 5200        (special LITE set)
 EOF
 
 if [ "$#" -eq 0 ]; then
@@ -27,7 +28,7 @@ if [ "$#" -eq 0 ]; then
         index-4204.fits
         index-4205.fits
         index-4206.fits
-	)
+    )
 
     echo
     echo "No arguments provided."
@@ -40,10 +41,35 @@ else
     echo
     echo "Downloading user-specified series: $* into ${DEST_DIR}"
     for series in "$@"; do
-        # Temporary subdir just for this series
+
+        # Special case: 5200 "LITE" set from NERSC portal
+        if [[ "$series" == "5200" ]]; then
+    		echo
+		echo "Special handling for 5200 LITE indexes (5200/5201/5202)..."
+
+    		for prefix in 5200 5201 5202; do
+        		for ((i=0; i<48; i++)); do
+            			I=$(printf "%02d" "$i")
+            			url="https://portal.nersc.gov/project/cosmo/temp/dstn/index-5200/LITE/index-${prefix}-${I}.fits"
+            			tmp="${DEST_DIR}/.partial-index-${prefix}-${I}.fits"
+            			final="${DEST_DIR}/index-${prefix}-${I}.fits"
+
+            			echo "Downloading ${url}"
+            			wget -c -O "${tmp}" "${url}"
+
+            			echo "Moving to ${final}"
+            			mv -f "${tmp}" "${final}"
+        		done
+    		done
+    		continue
+	fi
+
+
+        # Default handling for "normal" series via data.astrometry.net
         SERIES_DIR="${DEST_DIR}/${series}"
         mkdir -p "${SERIES_DIR}"
 
+        echo
         echo "Mirroring ${BASE_URL}/${series}/ -> ${SERIES_DIR}"
         wget -r -np -nH --cut-dirs=1 -R "index-*.fits.fz" \
             -P "${SERIES_DIR}" \
@@ -52,10 +78,11 @@ else
         echo "Moving index-*.fits from ${SERIES_DIR} to ${DEST_DIR}"
         find "${SERIES_DIR}" -type f -name "index-*.fits" -exec mv -f {} "${DEST_DIR}/" \;
 
-        # Clean up the now-empty series directory
+        # Clean up now-empty series directory
         find "${SERIES_DIR}" -type d -empty -delete || true
     done
 fi
 
+echo
 echo "Done. Index files are in ${DEST_DIR}."
 
