@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-INPUT_DIR=/astrolabe/data/input
-OUTPUT_DIR=/astrolabe/data/output
+INPUT_DIR=/astrolabe/data/input_images
+OUTPUT_DIR=/astrolabe/data/output_solves
 
 # Ensure the output dir exists
 mkdir -p "$OUTPUT_DIR"

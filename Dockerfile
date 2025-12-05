@@ -49,8 +49,12 @@ COPY config/astrometry.cfg /usr/local/astrometry/etc/astrometry.cfg
 
 ENV PATH="/usr/local/astrometry/bin:${PATH}"
 
-RUN mkdir -p /astrolabe/data/index
-RUN mkdir -p /astrolabe/scripts
+# Make relevant folders inside the astrolabe directory
+RUN mkdir -p /astrolabe/data/index && \
+    mkdir -p /astrolabe/data/input_images && \
+    mkdir -p /astrolabe/data/output_solves && \
+    mkdir -p /astrolabe/scripts
+
 
 COPY scripts/ /astrolabe/scripts
 RUN chmod -R +x /astrolabe/scripts
