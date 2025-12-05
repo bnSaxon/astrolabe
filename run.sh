@@ -15,8 +15,8 @@ echo
 
 BASE_DOCKER_CMD=(
 	docker run --rm -it 
-	-v "$(pwd)/data/input_images":/data/input
-	-v "$(pwd)/data/output":/data/output
+	-v "$(pwd)/data/input_images":/astrolabe/data/input
+	-v "$(pwd)/data/output":/astrolabe/data/output
 	-v "$(pwd)":/work
 )
 
@@ -33,11 +33,11 @@ if [[ "$CHOICE" == "1" ]]; then
 	echo
 	echo "Launching container with your index directory mounted:"
 	echo " Host: $INDEX_DIR"
-	echo " -> /data/index (inside container)"
+	echo " -> /astrolabe/data/index (inside container)"
 	echo
 
 	"${BASE_DOCKER_CMD[@]}" \
-		-v "$INDEX_DIR":/data/index \
+		-v "$INDEX_DIR":/astrolabe/data/index \
 		$IMAGE_NAME
 
 	exit 0
@@ -58,7 +58,7 @@ if [[ "$CHOICE" == "2" ]]; then
 		echo
 
 		"${BASE_DOCKER_CMD[@]}" \
-			-v "$PERSIST_DIR":/data/index \
+			-v "$PERSIST_DIR":/astrolabe/data/index \
 			"$IMAGE_NAME"
 		exit 0
 

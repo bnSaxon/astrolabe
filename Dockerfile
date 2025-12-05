@@ -1,4 +1,3 @@
-
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -7,7 +6,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     build-essential \
+    imagemagick \
+    file \
     swig \
+    saods9 \
     libbz2-dev \
     pkg-config \
     libcfitsio-dev \
@@ -30,6 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip install astropy
+
 # 2. Clone astrometry.net
 WORKDIR /opt
 RUN git clone https://github.com/dstndstn/astrometry.net.git
@@ -37,30 +41,21 @@ RUN git clone https://github.com/dstndstn/astrometry.net.git
 WORKDIR /opt/astrometry.net
 
 # 3. Build and install astrometry.net
-# Can customize INSTALL_DIR via 'make install INSTALL_DIR=/path'
 RUN make && make py && make extra && \
     make install
 
-# Add solve-field to path
+# We need to tell astrometry to search in astrolabe/data/index for index files
+COPY config/astrometry.cfg /usr/local/astrometry/etc/astrometry.cfg
+
 ENV PATH="/usr/local/astrometry/bin:${PATH}"
 
-# 4. Create a default config that looks for index files in /data/index
-# To prevent long build times we don't download any indexes in the image; they are expected
-# to be provided at runtime via a mounted volume.
-RUN mkdir -p /data/index && \
-    if [ -f /etc/astrometry.cfg ]; then mv /etc/astrometry.cfg /etc/astrometry.cfg.bak; fi && \
-    printf "add_path /data/index\n" > /etc/astrometry.cfg
+RUN mkdir -p /astrolabe/data/index
+RUN mkdir -p /astrolabe/scripts
 
-# 5. Add a helper script for optional index download
-COPY download_indexes.sh /usr/local/bin/download_astrometry_indexes
-RUN chmod +x /usr/local/bin/download_astrometry_indexes
+COPY scripts/ /astrolabe/scripts
+RUN chmod -R +x /astrolabe/scripts
 
-# Set a reasonable default working directory
 WORKDIR /astrolabe
 
-# 7. Put astrometry binaries in PATH (usually installed to /usr/local/bin already)
-ENV PATH="/usr/local/bin:${PATH}"
-
-# Default entrypoint: just a shell, so user can run solve-field or helper scripts
 ENTRYPOINT ["/bin/bash"]
 
